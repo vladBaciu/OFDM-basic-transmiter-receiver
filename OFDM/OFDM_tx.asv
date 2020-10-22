@@ -2,7 +2,8 @@ function [tx_data] = OFDM_tx(parameters,frequencyDomain_symbols)
     %fs = N_FFT * Δf
     sampling_frequency = parameters.fft_size * parameters.subcarrier_spacing;
     sampling_period= sampling_frequency^-1;
-    cyclicPrefix_length=ceil(parameters.cyclicPrefix_us/sampling_period);
+    %cyclicPrefix_length=ceil(parameters.cyclicPrefix_us/sampling_period);
+    cyclicPrefix_length = round(parameters.fft_size/16);
     timeDomain_symbols=zeros(parameters.fft_size + cyclicPrefix_length, parameters.number_symbols);
     
     %frequency to time domain
@@ -15,11 +16,19 @@ function [tx_data] = OFDM_tx(parameters,frequencyDomain_symbols)
         %(make the discrete sequence like a continuouse sequence by padding
         % with 0)
         inverse_input(end - parameters.number_subcarriers/2 + 1 :end) = ...
-                                                frequencyDomain_symbolSet(1:parameters.number_subcarriers/2);  
-        tx_data_without_cp = ifft(inverse_input);
-        
-        %add cyclic prefix
-        tx_data_with_cp=zeros(
+                                                frequencyDomain_symbolSet(1:parameters.number_subcarriers/2);
+                                            
+        tx_data_channel(:,k) = inverse_input;
     end
-    
+     
+        tx_data_without_cp = ifft(tx_data_channel);
+    for k = 1:parameters.number_symbols    
+        %add cyclic prefix
+        tx_data_with_cp = zeros(length(tx_data_without_cp(:,k)) + cyclicPrefix_length,1);
+        tx_data_with_cp(cyclicPrefix_length+1:end) = tx_data_without_cp(:,k);
+        tx_data_with_cp(1:cyclicPrefix_length)=tx_data_without_cp(end-cyclicPrefix_length+1:end,k);
+        tx_data_channel(0,k)
+    end
+        tx_data_channel=reshape(tx_data_channel,[],1);%parallel to serial conversion
+        tx_data = tx_data_with_cp;
 end

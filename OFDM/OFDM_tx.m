@@ -16,13 +16,19 @@ function [tx_data] = OFDM_tx(parameters,frequencyDomain_symbols)
         %(make the discrete sequence like a continuouse sequence by padding
         % with 0)
         inverse_input(end - parameters.number_subcarriers/2 + 1 :end) = ...
-                                                frequencyDomain_symbolSet(1:parameters.number_subcarriers/2);  
-        tx_data_without_cp = ifft(inverse_input);
-        
-        %add cyclic prefix
-        tx_data_with_cp = zeros(length(tx_data_without_cp) + cyclicPrefix_length,1);
-        tx_data_with_cp(cyclicPrefix_length+1:end) = tx_data_without_cp;
-        tx_data_with_cp(1:cyclicPrefix_length)=tx_data_without_cp(end-cyclicPrefix_length+1:end);
+                                                frequencyDomain_symbolSet(1:parameters.number_subcarriers/2);
+                                            
+        tx_data_channel(:,k) = inverse_input;
     end
-    tx_data = tx_data_with_cp;
+     
+        tx_data_without_cp = ifft(tx_data_channel);
+    for k = 1:parameters.number_symbols    
+        %add cyclic prefix
+        tx_data_with_cp = zeros(length(tx_data_without_cp(:,k)) + cyclicPrefix_length,1);
+        tx_data_with_cp(cyclicPrefix_length+1:end) = tx_data_without_cp(:,k);
+        tx_data_with_cp(1:cyclicPrefix_length)=tx_data_without_cp(end-cyclicPrefix_length+1:end,k);
+        tx_data(:,k) = tx_data_with_cp;
+    end
+        tx_data=reshape(tx_data,[],1);%parallel to serial conversion
+        
 end

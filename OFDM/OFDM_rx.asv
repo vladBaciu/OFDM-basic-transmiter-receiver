@@ -8,12 +8,12 @@ function [rx_data] = OFDM_rx(parameters,timeDomain_data)
     timeDomain_data=reshape(timeDomain_data,parameters.fft_size+cyclicPrefix_length,[]);
     timeDomain_data=timeDomain_data(cyclicPrefix_length+1:end,:);
     frequency_symbols = fft(timeDomain_data);
-    for k = 1: parameters.number_symbols
+    for k = 0: parameters.number_symbols-1
         
         rx_out = zeros(parameters.number_subcarriers, 1);
-        rx_out(1:parameters.number_subcarriers/2) = frequency_symbols(end - parameters.number_subcarriers/2 + 1:end,k);
-        rx_out(parameters.number_subcarriers/2+1:end) = frequency_symbols(2:parameters.number_subcarriers/2+1,k);
-        rx_buffer(:,k) = rx_out;
+        rx_out(1:parameters.number_subcarriers/2) = frequency_symbols(end - parameters.number_subcarriers/2 + 1:end);
+        rx_out(parameters.number_subcarriers/2+1:end) = frequency_symbols(2:parameters.number_subcarriers/2+1);
+        rx_buffer(:,k+1) = rx_out;
     end
     
     rx_data=reshape(rx_buffer,[],1);%parallel to serial conversion;
