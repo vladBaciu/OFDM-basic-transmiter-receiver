@@ -2,8 +2,8 @@ function [tx_data] = OFDM_tx(parameters,frequencyDomain_symbols)
     %fs = N_FFT * Δf
     sampling_frequency = parameters.fft_size * parameters.subcarrier_spacing;
     sampling_period= sampling_frequency^-1;
-    %cyclicPrefix_length=ceil(parameters.cyclicPrefix_us/sampling_period);
-    cyclicPrefix_length = round(parameters.fft_size/16);
+    cyclicPrefix_length=ceil(parameters.cyclicPrefix_us/sampling_period);
+    %cyclicPrefix_length = round(parameters.fft_size/16);
     timeDomain_symbols=zeros(parameters.fft_size + cyclicPrefix_length, parameters.number_symbols);
     
     %frequency to time domain
