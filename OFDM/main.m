@@ -4,7 +4,10 @@
 % 1.3 Implemented dynamic cyclic prefix and pilot tone insertion - Vlad
 % 1.4 ...
 
-subcarrier_spacings = [15 30 60 120 240];
+% found this SS - CPL table on a github example. 
+% Intuitively I can understand the relation between SS - CPL but not how
+% the CPL values were determined. Take it as it is now.
+subcarrier_spacings  = [15 30 60 120 240];
 cp_lengths_us_normal = [4.69 2.34 1.17 0.57 0.29]; % length of cp in microseconds for each numerology
 
 parameters.number_subcarriers = 90;
@@ -15,22 +18,52 @@ parameters.fft_size = 2^ceil(log2(parameters.number_subcarriers));
 parameters.cyclicPrefix_us=3.2*1e-6;;
 parameters.pilot_frequency = 5 + 5*1i;
 parameters.pilot_tones = 6;
+parameters.use_convolutional_code = 0;
 %Possible values: 'QPSK','16QAM','64QAM'
 constellation = '16QAM';
-
 sampling_frequency = parameters.fft_size * parameters.subcarrier_spacing;
 sampling_period= sampling_frequency^-1;
 parameters.cyclicPrefix_us=cp_lengths_us_normal(find(subcarrier_spacings==parameters.subcarrier_spacing/1000))*1e-6;;
 
-
 %create frequency domain vector
 frequencyDomain_symbols = zeros(parameters.number_subcarriers, parameters.number_symbols);
+
 %get available qam symbols
-qam_alphabet = QAM_mapping(constellation);
+[qam_alphabet, qam_gray_code] = QAM_mapping(constellation);
+
 %get a number of random indexes from qam_alphabet 
 random_index=ceil(length(qam_alphabet) * rand(size(frequencyDomain_symbols)));
+
 %get randomn constellation symbols
 frequencyDomain_symbols = qam_alphabet(random_index);
+
+%map frequency symbols to gray code
+for index_column=1:parameters.number_symbols
+    frequencyDomain_symbols(:,index_column);
+    for index_row=1:size(frequencyDomain_symbols,1)
+        mapping(index_row,index_column) =  find(qam_alphabet==frequencyDomain_symbols(index_row,index_column));
+        gray_mapping(index_row,index_column)= qam_gray_code(mapping(index_row,index_column));
+    end
+end
+
+trellis = poly2trellis(7,[133 171]);
+%code data using convolutional code
+%map gray code to frequency symbols
+for index=1:parameters.number_symbols
+    
+    data = de2bi(gray_mapping(:,index),'left-msb');
+    data_stream = reshape(data',1,[]);
+    code_data=convenc(data_stream,trellis);
+    code_data = reshape(code_data,size(data,2),[]);
+    code_data = code_data';
+    for index_row=1:length(code_data)
+        dec_symbols(index_row,index) = bi2de(code_data(index_row,:),'left-msb');
+        frequency_coded_symbols(index_row,index) = qam_alphabet(find(qam_gray_code==dec_symbols(index_row,index)));
+    end
+end
+
+
+
 pilot_interval = round(parameters.number_subcarriers/parameters.pilot_tones)-mod(parameters.number_subcarriers,parameters.pilot_tones);
 pilot_interval_index=[1:pilot_interval:parameters.number_subcarriers];
 frequencyDomain_symbols(pilot_interval_index(1:end),:)=parameters.pilot_frequency;

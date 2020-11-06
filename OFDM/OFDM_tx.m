@@ -5,18 +5,22 @@ function [tx_data] = OFDM_tx(parameters,frequencyDomain_symbols)
     cyclicPrefix_length=ceil(parameters.cyclicPrefix_us/sampling_period);
     %cyclicPrefix_length = round(parameters.fft_size/16);
     timeDomain_symbols=zeros(parameters.fft_size + cyclicPrefix_length, parameters.number_symbols);
-    
+    if parameters.use_convolutional_code
+        size = parameters.number_subcarriers;
+    else
+        size = parameters.number_subcarriers/2;
+    end
     %frequency to time domain
     inverse_input = zeros(parameters.fft_size, 1);
     for k = 1:parameters.number_symbols
-        frequencyDomain_symbolSet = frequencyDomain_symbols(:, k)
-        inverse_input(2:parameters.number_subcarriers/2 + 1) = ...
-                                                frequencyDomain_symbolSet(parameters.number_subcarriers/2 + 1:end);
+        frequencyDomain_symbolSet = frequencyDomain_symbols(:, k);
+        inverse_input(2:size + 1) = ...
+                                frequencyDomain_symbolSet(size + 1:end);
         %convert the discrete time sequence into the continouse time sequence
         %(make the discrete sequence like a continuouse sequence by padding
         % with 0)
-        inverse_input(end - parameters.number_subcarriers/2 + 1 :end) = ...
-                                                frequencyDomain_symbolSet(1:parameters.number_subcarriers/2);
+        inverse_input(end - size + 1 :end) = ...
+                                frequencyDomain_symbolSet(1:size);
                                             
         tx_data_channel(:,k) = inverse_input;
     end
