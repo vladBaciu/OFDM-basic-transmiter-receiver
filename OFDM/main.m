@@ -70,6 +70,16 @@ frequencyDomain_symbols(pilot_interval_index(1:end),:)=parameters.pilot_frequenc
 out = OFDM_tx(parameters,frequencyDomain_symbols);
 out = out + 0.021 * randn(size(out));
 
+
+hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', 0, ...
+                                 'PhaseOffset', 20, ... 
+                                 'SampleRate', parameters.number_symbols/sampling_period);
+
+out = step(hPFO,out);
+
+
+
+
 rx_constellations = OFDM_rx(parameters,out);
 tx_wihout_pilot = frequencyDomain_symbols;
 tx_wihout_pilot(pilot_interval_index(1:end),:) = [];

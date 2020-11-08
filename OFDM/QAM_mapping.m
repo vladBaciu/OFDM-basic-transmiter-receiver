@@ -29,7 +29,7 @@ function [alphabet_out, gray_out] = QAM_mapping(modulation)
     end
     dec = bi2de(g,'left-msb');
     reverse_flag = 0;
-    index = (1:4:length(qam_alphabet))
+    index = (1:4:length(qam_alphabet));
     for i=1:sqrt(length(qam_alphabet))
        
        temp = dec(index(i): i*sqrt(length(qam_alphabet)));

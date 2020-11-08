@@ -20,6 +20,8 @@ function [rx_data] = OFDM_rx(parameters,timeDomain_data)
         rx_buffer(:,k) = rx_out;
     end
     
+    rx_buffer = OFDM_phase_tracking(parameters.number_subcarriers,parameters.number_symbols,pilot_interval_index(1:end), ...
+                                    rx_buffer,parameters); 
     %eliminate pilot frequencies
     rx_buffer(pilot_interval_index(1:end),:) = [];
     
