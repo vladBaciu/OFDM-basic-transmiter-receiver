@@ -71,6 +71,7 @@ for index=1:parameters.number_symbols
 end
 
 
+
 pilot_interval = round(parameters.number_subcarriers/parameters.pilot_tones)-mod(parameters.number_subcarriers,parameters.pilot_tones);
 pilot_interval_index=[1:pilot_interval:parameters.number_subcarriers];
 frequencyDomain_symbols(pilot_interval_index(1:end),:)=parameters.pilot_frequency;
@@ -78,7 +79,7 @@ out = OFDM_tx(parameters,frequencyDomain_symbols);
 out = out + 0.021 * randn(size(out));
 
 frequency_offset = 7000;
-phase_offset = 20;
+phase_offset = 0;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
                                  'PhaseOffset', phase_offset, ... 

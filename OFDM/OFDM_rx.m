@@ -1,4 +1,4 @@
-function [rx_data] = OFDM_rx(parameters,timeDomain_data)
+function [rx_data] = OFDM_rx(parameters,timeDomain_data,f_est)
     
     rx_buffer = zeros(parameters.number_subcarriers, parameters.number_symbols);
     sampling_frequency = parameters.fft_size * parameters.subcarrier_spacing;
@@ -20,10 +20,20 @@ function [rx_data] = OFDM_rx(parameters,timeDomain_data)
         rx_buffer(:,k) = rx_out;
     end
     
-    rx_buffer = OFDM_phase_tracking(parameters.number_subcarriers,parameters.number_symbols,pilot_interval_index(1:end), ...
-                                    rx_buffer,parameters); 
+    
+    if(parameters.use_phase_and_CFO == 1)
+        rx_buffer = OFDM_phase_tracking(parameters.number_subcarriers,parameters.number_symbols,pilot_interval_index(1:end), ...
+                                        rx_buffer,parameters);
+                                    
+        rx_buffer = OFDM_estimate_CFO(parameters,rx_buffer,pilot_interval_index(1:end));                            
+        
+    end
+    
     %eliminate pilot frequencies
     rx_buffer(pilot_interval_index(1:end),:) = [];
     
     rx_data=reshape(rx_buffer,[],1);%parallel to serial conversion;
+    
+    
+   
 end
