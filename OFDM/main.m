@@ -77,8 +77,8 @@ frequencyDomain_symbols(pilot_interval_index(1:end),:)=parameters.pilot_frequenc
 out = OFDM_tx(parameters,frequencyDomain_symbols);
 out = out + 0.021 * randn(size(out));
 
-frequency_offset = 7000;
-phase_offset = 20;
+frequency_offset = 233;
+phase_offset = 30;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
                                  'PhaseOffset', phase_offset, ... 
