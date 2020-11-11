@@ -77,8 +77,13 @@ frequencyDomain_symbols(pilot_interval_index(1:end),:)=parameters.pilot_frequenc
 out = OFDM_tx(parameters,frequencyDomain_symbols);
 out = out + 0.021 * randn(size(out));
 
-frequency_offset = 233;
-phase_offset = 30;
+% TBD - multipath channel and channel estimation
+[fade_signal,ch] = multi_rayleigh(out,parameters.fft_size);
+fade_signal = fade_signal(1:end-8);
+
+
+frequency_offset = 4000;
+phase_offset = 20;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
                                  'PhaseOffset', phase_offset, ... 
@@ -95,7 +100,7 @@ out = step(hPFO,out);
 long_preamble = fft(long_preamble);
 
 
-rx_constellations = OFDM_rx(parameters,out,f_est);
+rx_constellations = OFDM_rx(parameters,out);
 tx_wihout_pilot = frequencyDomain_symbols;
 tx_wihout_pilot(pilot_interval_index(1:end),:) = [];
 tx_constellations = reshape(tx_wihout_pilot,[],1);;
@@ -114,6 +119,10 @@ end
 
 t=1:1:length(out);
 t = t * sampling_period;
+
+b=1:1:parameters.fft_size;
+figure
+plot(b,real(ch))
 
 figure
 plot(t,real(out))
