@@ -1,4 +1,4 @@
-function [rx_data] = OFDM_rx(parameters,timeDomain_data,ch)
+function [rx_data] = OFDM_rx(parameters,timeDomain_data)
     
     rx_buffer = zeros(parameters.number_subcarriers, parameters.number_symbols);
     sampling_frequency = parameters.fft_size * parameters.subcarrier_spacing;
@@ -20,6 +20,22 @@ function [rx_data] = OFDM_rx(parameters,timeDomain_data,ch)
         rx_buffer(:,k) = rx_out;
     end
     
+    % channel estimation needs to be insertet before phase tracking and CFO
+    % estimation
+    
+    % Method 1
+    % we can use the H function returned from the multi_rayleigh function 
+    % the question is how.
+    
+    % add one more parameter for the function - the channel from multi
+    % function
+    % data=data3(data(1:end),:)./H;
+    
+    
+    % Method 2
+    % second method - to extract another H like in the Physical example
+    % using the pilot tones
+    % the same as in Physi
     
     if(parameters.use_phase_and_CFO == 1)
         rx_buffer = OFDM_phase_tracking(parameters.number_subcarriers,parameters.number_symbols,pilot_interval_index(1:end), ...
@@ -29,14 +45,13 @@ function [rx_data] = OFDM_rx(parameters,timeDomain_data,ch)
         
     end
     
+   
     
     %eliminate pilot frequencies
     rx_buffer(pilot_interval_index(1:end),:) = [];
-    
+     
     rx_data=reshape(rx_buffer,[],1);%parallel to serial conversion;
-    H=interp1( P_f_station(1:end)',h,data_station(1:end)','linear','extrap');%Piecewise linear interpolation: The function value at the interpolation point is predicted by the linear function connecting its nearest two sides. Use the specified interpolation method to calculate the function value for the interpolation points beyond the known point set
-    ch=repmat(ch,ceil(length(rx_data)/length(ch));
-    ch = ch(1
-    rx_data = rx_data ./ch' ;
+    
+    
    
 end
