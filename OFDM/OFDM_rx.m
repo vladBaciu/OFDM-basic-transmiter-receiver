@@ -1,4 +1,4 @@
-function [rx_data] = OFDM_rx(parameters,timeDomain_data)
+function [rx_data] = OFDM_rx(parameters,timeDomain_data,f_est)
     
     rx_buffer = zeros(parameters.number_subcarriers, parameters.number_symbols);
     sampling_frequency = parameters.fft_size * parameters.subcarrier_spacing;
@@ -32,8 +32,8 @@ function [rx_data] = OFDM_rx(parameters,timeDomain_data)
     % H 1x128 , the data is 1300x1
     % data=data3(data(1:end),:)./H;
     
-    
-    % Method 2
+   
+    % Method 2 asd = rx_buffer(pilot_interval_index(1:end),:)
     % pilot tones: rx_buffer(pilot_interval_index(1:end),:)
     % second method - to extract another H like in the Physical example
     % using the pilot tones
@@ -49,17 +49,17 @@ function [rx_data] = OFDM_rx(parameters,timeDomain_data)
     
     % Insert your code here
     
-    
-    
-    
-    
-    
+
     if(parameters.use_phase_and_CFO == 1)
         rx_buffer = OFDM_phase_tracking(parameters.number_subcarriers,parameters.number_symbols,pilot_interval_index(1:end), ...
                                         rx_buffer,parameters);
-                                    
-        rx_buffer = OFDM_estimate_CFO(parameters,rx_buffer,pilot_interval_index(1:end));                            
-        
+         
+        if(f_est == 0)
+            rx_buffer = OFDM_estimate_CFO(parameters,rx_buffer,pilot_interval_index(1:end));
+        else
+            comp_phase = exp(1j*f_est*2*pi*[1:length(rx_buffer)]*sampling_period);
+            rx_buffer = rx_buffer .* comp_phase';
+        end                           
     end
     
    

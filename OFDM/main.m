@@ -7,6 +7,8 @@
 % found this SS - CPL table on a github example. 
 % Intuitively I can understand the relation between SS - CPL but not how
 % the CPL values were determined. Take it as it is now.
+close all
+
 subcarrier_spacings  = [15 30 60 120 240];
 cp_lengths_us_normal = [4.69 2.34 1.17 0.57 0.29]; % length of cp in microseconds for each numerology
 
@@ -20,6 +22,7 @@ parameters.pilot_frequency = 5 + 5*1i;
 parameters.pilot_tones = 6;
 parameters.use_convolutional_code = 0;
 parameters.use_phase_and_CFO = 1;
+parameters.use_CFO_preamble = 1;
 
 %Possible values: 'QPSK','16QAM','64QAM'
 constellation = '16QAM';
@@ -30,11 +33,14 @@ parameters.cyclicPrefix_us=cp_lengths_us_normal(find(subcarrier_spacings==parame
 %create frequency domain vector
 frequencyDomain_symbols = zeros(parameters.number_subcarriers, parameters.number_symbols);
 
+%do not change the sequence
 preamble1=[0,1,-1,-1,1,1,-1,1,-1,1,-1,-1,-1,-1,-1,1,1,-1,-1,1,-1,1,-1,1,1,1,1];
-preamble2=[1,1,1,1,-1,1,-1,1,1,-1,-1,1,1,1,1,1,1,-1,1,-1,1,1,-1,-1,1,1];
-preamble=[preamble1,zeros(1,11),preamble2]
+preamble2=[1,1,1,1,-1,1,1,1,1,-1,-1,1,1,1,1,1,1,-1,1,-1,1,1,-1,-1,1,1];
+
+preamble=[preamble1,zeros(1,11),preamble2];
 preamble_td=ifft(preamble);
-long_preamble=[preamble_td(33:64),preamble_td,preamble_td]; 
+long_preamble=[preamble_td(33:64),preamble_td,preamble_td];
+
 
 %get available qam symbols
 [qam_alphabet, qam_gray_code] = QAM_mapping(constellation);
@@ -82,7 +88,7 @@ out = out + 0.021 * randn(size(out));
 fade_signal = fade_signal(1:end-8);
 
 
-frequency_offset = 4000;
+frequency_offset = 5000;
 phase_offset = 20;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
@@ -99,8 +105,13 @@ out = step(hPFO,out);
 
 long_preamble = fft(long_preamble);
 
+if (parameters.use_CFO_preamble == 1)
+    f_est = OFDM_estimate_CFO_preamble(long_preamble,sampling_frequency);
+else
+    f_est = 0;
+end
 
-rx_constellations = OFDM_rx(parameters,out);
+rx_constellations = OFDM_rx(parameters,out,f_est);
 tx_wihout_pilot = frequencyDomain_symbols;
 tx_wihout_pilot(pilot_interval_index(1:end),:) = [];
 tx_constellations = reshape(tx_wihout_pilot,[],1);;
@@ -111,6 +122,7 @@ error = rx_constellations - tx_constellations;
 
 % L^2 norm for error between rx and tx
 norm_error = norm(error);
+fprintf('norm error =%d\n',norm_error/length(error));
 if norm_error/length(error) < 0.03
     disp('tx data = rx data');
 else
