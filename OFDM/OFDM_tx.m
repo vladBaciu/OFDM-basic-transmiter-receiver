@@ -5,6 +5,10 @@ function [tx_data] = OFDM_tx(parameters,frequencyDomain_symbols)
     cyclicPrefix_length=ceil(parameters.cyclicPrefix_us/sampling_period);
     %cyclicPrefix_length = round(parameters.fft_size/16);
     timeDomain_symbols=zeros(parameters.fft_size + cyclicPrefix_length, parameters.number_symbols);
+    
+    Nd = 50;
+    t_interference = rand(Nd,1)-0.5+j*( rand(Nd,1)-0.5);
+    
     if parameters.use_convolutional_code
         size = parameters.number_subcarriers;
     else
@@ -26,12 +30,13 @@ function [tx_data] = OFDM_tx(parameters,frequencyDomain_symbols)
     end
      
         tx_data_without_cp = ifft(tx_data_channel);
+         
     for k = 1:parameters.number_symbols    
         %add cyclic prefix
         tx_data_with_cp = zeros(length(tx_data_without_cp(:,k)) + cyclicPrefix_length,1);
         tx_data_with_cp(cyclicPrefix_length+1:end) = tx_data_without_cp(:,k);
         tx_data_with_cp(1:cyclicPrefix_length)=tx_data_without_cp(end-cyclicPrefix_length+1:end,k);
-        tx_data(:,k) = tx_data_with_cp;
+        tx_data(:,k) = [t_interference' tx_data_with_cp']';
     end
         tx_data=reshape(tx_data,[],1);%parallel to serial conversion
         

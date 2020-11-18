@@ -9,6 +9,37 @@ function [rx_data] = OFDM_rx(parameters,timeDomain_data,f_est)
     pilot_interval = round(parameters.number_subcarriers/parameters.pilot_tones)-mod(parameters.number_subcarriers,parameters.pilot_tones);
     pilot_interval_index=[1:pilot_interval:parameters.number_subcarriers];
     
+    
+sig_w = zeros(2,cyclicPrefix_length); % Initialize the two sliding window buffers
+STOs = [0]; % Initialize the STO buffer
+Nsym = parameters.fft_size + cyclicPrefix_length;
+m = 0;
+
+for n=1:length(timeDomain_data)
+   sig_w(1,:) = [sig_w(1,2:end) timeDomain_data(n)]; % Update signal window 1
+   m = n-parameters.fft_size;
+   temp = [0];
+   if m>0
+     sig_w(2,:)=[sig_w(2,2:end) timeDomain_data(m)]; % Update signal window 2
+     den = norm(sig_w(1,:))*norm(sig_w(2,:));
+     corr(n) = abs(sig_w(1,:)*sig_w(2,:)')/den;
+    
+     if corr(n)>0.93 & (corr(n) > corr(n-1))
+       if(length(STOs) > 1)
+         
+         if(m>STOs(end)+Nsym-15)  
+             STOs=[STOs  m]; % List the estimated STO
+         end
+       else
+             STOs=[STOs  m]; % List the estimated STO
+       end  
+     end
+   end
+end
+
+Estimated_STOs = STOs(2:end);
+    
+    
     timeDomain_data=reshape(timeDomain_data,parameters.fft_size+cyclicPrefix_length,[]);
     timeDomain_data=timeDomain_data(cyclicPrefix_length+1:end,:);
     frequency_symbols = fft(timeDomain_data);

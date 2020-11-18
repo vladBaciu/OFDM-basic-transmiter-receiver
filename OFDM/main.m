@@ -83,13 +83,14 @@ frequencyDomain_symbols(pilot_interval_index(1:end),:)=parameters.pilot_frequenc
 out = OFDM_tx(parameters,frequencyDomain_symbols);
 out = out + 0.021 * randn(size(out));
 
+
 % TBD - multipath channel and channel estimation
 [fade_signal,ch] = multi_rayleigh(out,parameters.fft_size);
 fade_signal = fade_signal(1:end-8);
 
 
-frequency_offset = 5000;
-phase_offset = 20;
+frequency_offset = 0;
+phase_offset = 30;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
                                  'PhaseOffset', phase_offset, ... 
