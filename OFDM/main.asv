@@ -89,8 +89,8 @@ out = out + 0.021 * randn(size(out));
 fade_signal = fade_signal(1:end-8);
 
 
-frequency_offset = 600;
-phase_offset = 20;
+frequency_offset = 0;
+phase_offset = 0;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
                                  'PhaseOffset', phase_offset, ... 

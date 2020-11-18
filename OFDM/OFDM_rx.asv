@@ -24,33 +24,28 @@ for n=1:length(timeDomain_data)
      den = norm(sig_w(1,:))*norm(sig_w(2,:));
      corr(n) = abs(sig_w(1,:)*sig_w(2,:)')/den;
     
-     if corr(n)>0.97 
+     if corr(n)>0.97 & (corr(n) > corr(n-1))
        if(length(STOs) > 1)
+         
          if(m>STOs(end)+Nsym-15)  
              STOs=[STOs  m]; % List the estimated STO
          end
        else
              STOs=[STOs  m]; % List the estimated STO
-       end
-       
-       if(corr(n) > corr(n-1))
-            STOs(end) = m;   
-       end
+       end  
      end
    end
 end
 
 Estimated_STOs = STOs(2:end) - cyclicPrefix_length;
 
-if(Estimated_STOs(1) ~= 0)
-    timeDomain_data_temp = [0];
-    for n=1:length(Estimated_STOs)
-
-        timeDomain_data_temp = [timeDomain_data_temp' timeDomain_data(Estimated_STOs(n)+1:Estimated_STOs(n)+Nsym)']';
-    end
+timeDomain_data_temp = 0;
+for n=1:length(Estimated_STOs)
+    
+    timeDomain_data_temp = timeDomain_data_temp +  ...
+                           timeDomain_data(Estimated_STOs(n):Estimated_STOs(n)+Nsym);
 end
 
-    timeDomain_data = timeDomain_data_temp(2:end);
     
     timeDomain_data=reshape(timeDomain_data,parameters.fft_size+cyclicPrefix_length,[]);
     timeDomain_data=timeDomain_data(cyclicPrefix_length+1:end,:);
