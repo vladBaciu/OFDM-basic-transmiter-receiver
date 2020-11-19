@@ -95,7 +95,7 @@ fade_signal = fade_signal(1:end-1);
 
 
 frequency_offset = 600;
-phase_offset = 10;
+phase_offset = 20;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
                                  'PhaseOffset', phase_offset, ... 
@@ -145,6 +145,8 @@ plot(b,real(ch))
 
 figure
 plot(t,real(out))
+hold on
+plot(t,real(save_data_tx),'color','red')
 grid on
 title('Time domain data')
 xlabel('Time (s)')
