@@ -84,8 +84,7 @@ out = OFDM_tx(parameters,frequencyDomain_symbols);
 
 save_data_tx = out;
 save('tx_data','save_data_tx');
-figure
-plot(t,save_data_tx)
+
 
 out = out + 0.021 * randn(size(out));
 
@@ -96,7 +95,7 @@ fade_signal = fade_signal(1:end-1);
 
 
 frequency_offset = 600;
-phase_offset = 20;
+phase_offset = 10;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
                                  'PhaseOffset', phase_offset, ... 
@@ -108,7 +107,7 @@ long_preamble = step(hPFO,long_preamble);
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
                                  'PhaseOffset', phase_offset, ... 
                                  'SampleRate', parameters.number_symbols/sampling_period);
-out = step(hPFO,out);
+out = step(hPFO,fade_signal);
 
 long_preamble = fft(long_preamble);
 
@@ -117,6 +116,7 @@ if (parameters.use_CFO_preamble == 1)
 else
     f_est = 0;
 end
+
 
 rx_constellations = OFDM_rx(parameters,out,f_est);
 tx_wihout_pilot = frequencyDomain_symbols;

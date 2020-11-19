@@ -7,7 +7,6 @@ function [tx_data] = OFDM_tx(parameters,frequencyDomain_symbols)
     timeDomain_symbols=zeros(parameters.fft_size + cyclicPrefix_length, parameters.number_symbols);
     
     Nd = randi([30 50],1,1);
-    Nd = 0;
     t_interference = rand(Nd,1)-0.5+j*( rand(Nd,1)-0.5);
     
     if parameters.use_convolutional_code

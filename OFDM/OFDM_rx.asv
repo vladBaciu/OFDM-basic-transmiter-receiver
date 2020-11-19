@@ -43,8 +43,7 @@ end
 Estimated_STOs = STOs(2:end) - cyclicPrefix_length;
 
 if(length(Estimated_STOs) < parameters.number_symbols)
-    error('Breaking out of rx function. The STO estimation found only %d received symbol out of %d', ...
-                                                length(Estimated_STOs),parameters.number_symbols);
+    error('Breaking out of rx function. The STO estimation found only %d');
     rx_data = -1;
     return
 end
