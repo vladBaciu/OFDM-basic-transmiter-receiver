@@ -151,7 +151,7 @@ grid on
 title('Time domain data')
 xlabel('Time (s)')
 ylabel('Amplitude')
-legend('Tx signal - multipath fading','Tx signal')
+legend('cos(x)','Origi')
 
 figure
 plot(rx_constellations, 'o', 'color','blue')
