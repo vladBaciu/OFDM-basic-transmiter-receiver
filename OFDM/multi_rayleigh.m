@@ -3,8 +3,8 @@ function [y, ChFrqRep] = multi_rayleigh( SerOverGIOfdmSym, Nifftop )
 % @Para：SerOverGIOfdmSym —— Oversampling
 
 % @@@@@@@@ Parameters @@@@@@@@
-PowerdB     = [0 -8 -17 -21 -25];   % Channel Tap power distribution(dB)
-Delay       = [0 3 5 6 8];          % Deelay sample
+PowerdB     = [2 0 0 0 5];   % Channel Tap power distribution(dB)
+Delay       = [0 0 0 0 1];          % Deelay sample
 Power       = 10.^(PowerdB / 10);   % Channel tap power distribution (linear
 Ntap        = length(PowerdB);      % Number of channel taps
 Lch         = Delay(end) + 1;       % Channel length

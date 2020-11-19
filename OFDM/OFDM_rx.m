@@ -50,8 +50,11 @@ if(Estimated_STOs(1) ~= 0)
     end
 end
 
+if(Estimated_STOs(1) ~= 0)
     timeDomain_data = timeDomain_data_temp(2:end);
-    
+else
+    timeDomain_data = timeDomain_data;
+end
     timeDomain_data=reshape(timeDomain_data,parameters.fft_size+cyclicPrefix_length,[]);
     timeDomain_data=timeDomain_data(cyclicPrefix_length+1:end,:);
     frequency_symbols = fft(timeDomain_data);
@@ -91,6 +94,19 @@ end
     % data_aftereq=data3(data_station(1:end),:)./H;
     
     % Insert your code here
+    %     data(P_f_station(1:end),:)=pilot_seq;
+    %     pilot_seq=ones(pilot_num,data_col)*P_f;
+    %     rx_buffer(pilot_interval_index(1:end),:)=parameters.pilot_frequency;
+   
+%     pilot_seq = ones(length(pilot_interval_index),parameters.number_symbols)*parameters.pilot_frequency;%6*10
+%     %pilot_ = ones(1,parameters.number_symbols)*parameters.pilot_frequency;%1*10
+%     pilot_rx = rx_buffer(pilot_interval_index(1:end),:);
+%     h = pilot_rx./pilot_seq;
+%     data_station = 1:1:parameters.fft_size; 
+%     data_station(pilot_interval_index(1:end)) = [];
+%     H=interp1(pilot_interval_index(1:end)',h ,data_station(1:end)','linear','extrap');
+%     
+%     rx_buffer = rx_buffer(data_station(1:end),:)./H; 
     
 
     if(parameters.use_phase_and_CFO == 1)

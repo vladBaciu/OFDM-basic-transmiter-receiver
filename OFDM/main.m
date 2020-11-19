@@ -81,12 +81,18 @@ pilot_interval = round(parameters.number_subcarriers/parameters.pilot_tones)-mod
 pilot_interval_index=[1:pilot_interval:parameters.number_subcarriers];
 frequencyDomain_symbols(pilot_interval_index(1:end),:)=parameters.pilot_frequency;
 out = OFDM_tx(parameters,frequencyDomain_symbols);
+
+save_data_tx = out;
+save('tx_data','save_data_tx');
+figure
+plot(t,save_data_tx)
+
 out = out + 0.021 * randn(size(out));
 
 
 % TBD - multipath channel and channel estimation
 [fade_signal,ch] = multi_rayleigh(out,parameters.fft_size);
-fade_signal = fade_signal(1:end-8);
+fade_signal = fade_signal(1:end-1);
 
 
 frequency_offset = 600;
