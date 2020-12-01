@@ -24,7 +24,7 @@ for n=1:length(timeDomain_data)
      den = norm(sig_w(1,:))*norm(sig_w(2,:));
      corr(n) = abs(sig_w(1,:)*sig_w(2,:)')/den;
     
-     if corr(n)>0.97 
+     if corr(n)>0.9 
        if(length(STOs) > 1)
          if(m>STOs(end)+Nsym-15)  
              STOs=[STOs  m]; % List the estimated STO

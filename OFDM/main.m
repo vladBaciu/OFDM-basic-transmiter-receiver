@@ -158,3 +158,47 @@ plot(rx_constellations, 'o', 'color','blue')
 hold on
 plot(tx_constellations, 'o', 'color','red')
 title('TX/RX constellations')
+
+
+
+te = sum(abs(error))
+ber = te/length(tx_constellations)
+
+
+
+% 
+% 
+% 
+% 
+% EbNoVec = (5:15)';      % Eb/No values (dB)
+% berEst = zeros(size(EbNoVec));
+% k = log2(4);            % Bits per symbol
+% %BER Calculations
+% 
+% 
+% for n = 1:length(EbNoVec)
+%     % Convert Eb/No to SNR
+%     snrdB = EbNoVec(n) + 10*log10(k);
+%     % Reset the error and bit counters
+%     numErrs = 0;
+%     numBits = 0;
+%     
+%     while numErrs < 200 && numBits < 1e7
+%                                
+%       
+%         % Calculate the number of bit errors
+%         nErrors = biterr(tx_constellations,rx_constellations);
+%         
+%         % Increment the error and bit counters
+%         numErrs = numErrs + nErrors;
+%         numBits = numBits + numSymPerFrame*k;
+%     end
+%     
+%     % Estimate the BER
+%     berEst(n) = numErrs/numBits;
+% end
+
+
+
+
+
