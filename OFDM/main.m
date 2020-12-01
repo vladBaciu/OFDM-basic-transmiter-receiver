@@ -83,7 +83,7 @@ frequencyDomain_symbols(pilot_interval_index(1:end),:)=parameters.pilot_frequenc
 out = OFDM_tx(parameters,frequencyDomain_symbols);
 
 save_data_tx = out;
-save('tx_data','save_data_tx');
+%save('tx_data','save_data_tx');
 
 
 out = out + 0.021 * randn(size(out));
@@ -117,11 +117,15 @@ else
     f_est = 0;
 end
 
+% rx_constellations = OFDM_rx(parameters,tx_data_old,f_est);
+% save('tx_constellation','rx_constellations');
 
 rx_constellations = OFDM_rx(parameters,out,f_est);
 tx_wihout_pilot = frequencyDomain_symbols;
 tx_wihout_pilot(pilot_interval_index(1:end),:) = [];
 tx_constellations = reshape(tx_wihout_pilot,[],1);;
+
+
 
 
 % Error
