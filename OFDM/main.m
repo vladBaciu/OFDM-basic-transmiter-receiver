@@ -147,8 +147,6 @@ b=1:1:parameters.fft_size;
 figure
 plot(b,real(ch))
 
-Y = fft(out);
-plot(t,Y);
 
 figure
 plot(t,real(out))
