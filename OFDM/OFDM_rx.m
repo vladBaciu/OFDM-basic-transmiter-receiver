@@ -114,7 +114,11 @@ end
     data_station = 1:1:parameters.fft_size; 
     data_station(pilot_interval_index(1:end)) = [];
     H=interp1(pilot_interval_index(1:end),h ,data_station(1:end),'linear','extrap');
-    
+%     xi = (1:1/90:length(H))'; 
+%     x1 = (1:1:length(H))'; 
+%     H = interp1(x1,H,xi);
+%     H = H(1:length(H):end,:);
+    %here maight be the problem 
     rx_buffer = rx_buffer./H(1:parameters.number_subcarriers,:); 
     
 
