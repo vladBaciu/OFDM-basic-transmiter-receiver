@@ -164,8 +164,8 @@ plot(tx_constellations, 'o', 'color','red')
 title('TX/RX constellations')
 
 
-
-te = sum(abs(error))
+%calculate error and bit error rate
+te = sum(abs(error));
 ber = te/length(tx_constellations)
 
 

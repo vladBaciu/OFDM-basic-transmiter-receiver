@@ -1,3 +1,7 @@
+
+
+% function [] = real_world_rx_estimate(parameters, rx_buffer, pilot_interval_index)
+
 close all
 load tx_data_old.mat 
 load Rx_OFDM_19_11_2020.mat 
@@ -52,3 +56,7 @@ plot(rx_constellations, 'o', 'color','blue')
 hold on
 plot(tx_constellations, 'o', 'color','red')
 title('RX constellations')
+
+
+
+%end
