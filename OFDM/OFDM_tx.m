@@ -5,7 +5,7 @@ function [tx_data] = OFDM_tx(parameters,frequencyDomain_symbols)
     cyclicPrefix_length=ceil(parameters.cyclicPrefix_us/sampling_period);
     %cyclicPrefix_length = round(parameters.fft_size/16);
     timeDomain_symbols=zeros(parameters.fft_size + cyclicPrefix_length, parameters.number_symbols);
-    
+    %rng('default')
     Nd = randi([30 50],1,1);
     %Nd = 0;
     t_interference = rand(Nd,1)-0.5+j*( rand(Nd,1)-0.5);

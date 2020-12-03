@@ -1,3 +1,7 @@
+
+
+% function [] = real_world_rx_estimate(parameters, rx_buffer, pilot_interval_index)
+
 close all
 tx_data_old = load('tx_data_old.mat')
 tx_data_old = tx_data_old.save_data_tx;
@@ -54,3 +58,7 @@ plot(rx_constellations, 'o', 'color','blue')
 hold on
 plot(tx_constellations, 'o', 'color','red')
 title('RX constellations')
+
+
+
+%end
