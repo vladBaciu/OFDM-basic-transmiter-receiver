@@ -118,8 +118,12 @@ end
 %     x1 = (1:1:length(H))'; 
 %     H = interp1(x1,H,xi);
 %     H = H(1:length(H):end,:);
-    %here maight be the problem 
-    rx_buffer = rx_buffer./H(1:parameters.number_subcarriers,:); 
+    %here maight be the problem'
+    if(parameters.number_symbols == 1)
+        rx_buffer = rx_buffer./H(1:parameters.number_subcarriers)'; 
+    else
+        rx_buffer = rx_buffer./H(1:parameters.number_subcarriers,:); 
+    end
     
 
     if(parameters.use_phase_and_CFO == 1)

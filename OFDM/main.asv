@@ -14,7 +14,7 @@ subcarrier_spacings  = [7.5 15 30 60 120 240];
 cp_lengths_us_normal = [9.39 4.69 2.34 1.17 0.57 0.29]; % length of cp in microseconds for each numerology
 
 parameters.number_subcarriers = 90;
-parameters.subcarrier_spacing = 7500; %  subcarrier spacing Hz
+parameters.subcarrier_spacing = 60000; %  subcarrier spacing Hz
 parameters.number_symbols = 10;
 %Possible values: 128 512 1024 2048
 parameters.fft_size = 2^ceil(log2(parameters.number_subcarriers));
@@ -28,6 +28,7 @@ parameters.use_CFO_preamble = 1;
 %Possible values: 'QPSK','16QAM','64QAM'
 constellation = '16QAM';
 sampling_frequency = parameters.fft_size * parameters.subcarrier_spacing;
+sampling_frequency=
 sampling_period= sampling_frequency^-1;
 parameters.cyclicPrefix_us=cp_lengths_us_normal(find(subcarrier_spacings==parameters.subcarrier_spacing/1000))*1e-6;;
 

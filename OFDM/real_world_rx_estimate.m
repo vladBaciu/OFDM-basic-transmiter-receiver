@@ -2,17 +2,16 @@
 
 % function [] = real_world_rx_estimate(parameters, rx_buffer, pilot_interval_index)
 
-close all
 tx_data_old = load('tx_data_old.mat')
 tx_data_old = tx_data_old.save_data_tx;
 load Rx_OFDM_19_11_2020.mat 
 load tx_constellation.mat
+load Rx_OFDM_19_11_2020_fs_1Mhz.mat
 
-
-
+out1 = Rx_OFDM_19_11_2020_fs_1Mhz;
 %out1 = Rx_OFDM_19_11_2020(10000:13000);
-out1 = Rx_OFDM_19_11_2020(2000:7000);
-rx_constellations = OFDM_rx(parameters,Rx_data_1MHz,0);
+%out1 = Rx_OFDM_19_11_2020(2000:7000);
+rx_constellations = OFDM_rx(parameters,out1,0);
 tx_wihout_pilot = frequencyDomain_symbols;
 tx_wihout_pilot(pilot_interval_index(1:end),:) = [];
 tx_constellations = reshape(tx_wihout_pilot,[],1);
@@ -49,7 +48,7 @@ ylabel('Amplitude')
 legend('Rx signal')
 
 figure
-[r,lags] = xcorr(Rx_OFDM_19_11_2020,tx_data_temp);
+[r,lags] = xcorr(out1,tx_data_temp);
 stem(lags,r)
 
 
