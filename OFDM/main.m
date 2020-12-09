@@ -24,6 +24,7 @@ parameters.pilot_tones = 6;
 parameters.use_convolutional_code = 0;
 parameters.use_phase_and_CFO = 1;
 parameters.use_CFO_preamble = 1;
+parameters.en_multichannel = 0;
 
 %Possible values: 'QPSK','16QAM','64QAM'
 constellation = '16QAM';
@@ -88,19 +89,23 @@ save_data_tx = out;
 % subcarier spacing
 % pilot tones
 % number symbols 
-%save('tx_data_12_08_s_7500_8_20','save_data_tx');
+save('tx_data_test_spectrum','save_data_tx');
 
 
 out = out + 0.021 * randn(size(out));
 
 
 % TBD - multipath channel and channel estimation
-[fade_signal,ch] = multi_rayleigh(out,parameters.fft_size);
-fade_signal = fade_signal(1:end-1);
+if parameters.en_multichannel==1
+    [fade_signal,ch] = multi_rayleigh(out,parameters.fft_size);
+    fade_signal = fade_signal(1:end-1);
+else
+    fade_signal = out;
+end
 
 
-frequency_offset = 600;
-phase_offset = 20;
+frequency_offset = 0;
+phase_offset = 0;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
                                  'PhaseOffset', phase_offset, ... 
@@ -149,8 +154,10 @@ t=1:1:length(out);
 t = t * sampling_period;
 
 b=1:1:parameters.fft_size;
-figure
-plot(b,real(ch))
+if parameters.en_multichannel == 1
+    figure
+    plot(b,real(ch))
+end
 
 
 figure
