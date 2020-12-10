@@ -24,7 +24,7 @@ parameters.pilot_tones = 6;
 parameters.use_convolutional_code = 0;
 parameters.use_phase_and_CFO = 1;
 parameters.use_CFO_preamble = 1;
-parameters.en_multichannel = 0;
+parameters.en_multichannel = 1;
 
 %Possible values: 'QPSK','16QAM','64QAM'
 constellation = '16QAM';
@@ -104,8 +104,8 @@ else
 end
 
 
-frequency_offset = 0;
-phase_offset = 0;
+frequency_offset = 800;
+phase_offset = 20;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
                                  'PhaseOffset', phase_offset, ... 
