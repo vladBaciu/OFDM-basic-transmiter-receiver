@@ -106,26 +106,26 @@ end
     %     data(P_f_station(1:end),:)=pilot_seq;
     %     pilot_seq=ones(pilot_num,data_col)*P_f;
     %     rx_buffer(pilot_interval_index(1:end),:)=parameters.pilot_frequency;
-   
-    pilot_seq = ones(length(pilot_interval_index),parameters.number_symbols)*parameters.pilot_frequency;%6*10
-    %pilot_ = ones(1,parameters.number_symbols)*parameters.pilot_frequency;%1*10
-    pilot_rx = rx_buffer(pilot_interval_index(1:end),:);
-    h = pilot_rx./pilot_seq;
-    data_station = 1:1:parameters.fft_size; 
-    data_station(pilot_interval_index(1:end)) = [];
-    H=interp1(pilot_interval_index(1:end),h ,data_station(1:end),'linear','extrap');
-%     xi = (1:1/90:length(H))'; 
-%     x1 = (1:1:length(H))'; 
-%     H = interp1(x1,H,xi);
-%     H = H(1:length(H):end,:);
-    %here maight be the problem'
-    if(parameters.number_symbols == 1)
-        rx_buffer = rx_buffer./H(1:parameters.number_subcarriers)'; 
-    else
-        rx_buffer = rx_buffer./H(1:parameters.number_subcarriers,:); 
-    end
+    if(parameters.en_multichannel == 1)
+        pilot_seq = ones(length(pilot_interval_index),parameters.number_symbols)*parameters.pilot_frequency;%6*10
+        %pilot_ = ones(1,parameters.number_symbols)*parameters.pilot_frequency;%1*10
+        pilot_rx = rx_buffer(pilot_interval_index(1:end),:);
+        h = pilot_rx./pilot_seq;
+        data_station = 1:1:parameters.fft_size; 
+        data_station(pilot_interval_index(1:end)) = [];
+        H=interp1(pilot_interval_index(1:end),h ,data_station(1:end),'linear','extrap');
+    %     xi = (1:1/90:length(H))'; 
+    %     x1 = (1:1:length(H))'; 
+    %     H = interp1(x1,H,xi);
+    %     H = H(1:length(H):end,:);
+        %here maight be the problem'
+        if(parameters.number_symbols == 1)
+            rx_buffer = rx_buffer./H(1:parameters.number_subcarriers)'; 
+        else
+            rx_buffer = rx_buffer./H(1:parameters.number_subcarriers,:); 
+        end
     
-
+    end
     if(parameters.use_phase_and_CFO == 1)
         rx_buffer = OFDM_phase_tracking(parameters.number_subcarriers,parameters.number_symbols,pilot_interval_index(1:end), ...
                                         rx_buffer,parameters);

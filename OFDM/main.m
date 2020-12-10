@@ -19,11 +19,11 @@ parameters.number_symbols = 10;
 %Possible values: 128 512 1024 2048
 parameters.fft_size = 2^ceil(log2(parameters.number_subcarriers));
 parameters.cyclicPrefix_us=3.2*1e-6;
-parameters.pilot_frequency = 5 + 5*1i;
+parameters.pilot_frequency = 6 + 6*1i;
 parameters.pilot_tones = 6;
 parameters.use_convolutional_code = 0;
 parameters.use_phase_and_CFO = 1;
-parameters.use_CFO_preamble = 1;
+parameters.use_CFO_preamble = 0;
 parameters.en_multichannel = 1;
 
 %Possible values: 'QPSK','16QAM','64QAM'
@@ -92,20 +92,21 @@ save_data_tx = out;
 %save('tx_data','save_data_tx');
 
 
-out = out + 0.021 * randn(size(out));
+out = out + 0.020 * randn(size(out));
 
 
 % TBD - multipath channel and channel estimation
 if parameters.en_multichannel==1
-    [fade_signal,ch] = CHANNEL_multi_rayleigh(out,parameters.fft_size);
-    fade_signal = fade_signal(1:end-1);
+    [fade_signal, ch, ir] = CHANNEL_multi_rayleigh(out,parameters.fft_size);
+     fade_signal = fade_signal(1:length(out));
+     
 else
     fade_signal = out;
 end
 
 
-frequency_offset = 800;
-phase_offset = 20;
+frequency_offset = 700;
+phase_offset = 30;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
                                  'PhaseOffset', phase_offset, ... 
@@ -156,7 +157,7 @@ t = t * sampling_period;
 b=1:1:parameters.fft_size;
 if parameters.en_multichannel == 1
     figure
-    plot(b,real(ch))
+    plot(b,ch)
 end
 
 

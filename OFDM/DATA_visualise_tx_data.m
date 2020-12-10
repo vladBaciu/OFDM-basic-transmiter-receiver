@@ -13,8 +13,11 @@ fft_size = 2^ceil(log2(90));
 fs = fft_size * 30000;
 sampling_period= fs^-1;
 
-tx_data_sent = load('Rx_OFDM_19_11_2020.mat')
-tx_data_sent = tx_data_sent.save_data_tx;
+tx_data = load('OFDM_10_12_2020/tx_data.mat')
+tx_data = tx_data.save_data_tx;
+
+tx_data_sent = load('OFDM_10_12_2020/tx_data_oversampled4.mat')
+tx_data_sent = tx_data_sent.data_to_send;
 
 t=1:1:length(tx_data_sent);
 t = t * sampling_period;
