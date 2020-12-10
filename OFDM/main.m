@@ -14,7 +14,7 @@ subcarrier_spacings  = [7.5 15 30 60 120 240];
 cp_lengths_us_normal = [9.39 4.69 2.34 1.17 0.57 0.29]; % length of cp in microseconds for each numerology
 
 parameters.number_subcarriers = 90;
-parameters.subcarrier_spacing = 7500; %  subcarrier spacing Hz
+parameters.subcarrier_spacing = 30000; %  subcarrier spacing Hz
 parameters.number_symbols = 10;
 %Possible values: 128 512 1024 2048
 parameters.fft_size = 2^ceil(log2(parameters.number_subcarriers));
@@ -89,7 +89,7 @@ save_data_tx = out;
 % subcarier spacing
 % pilot tones
 % number symbols 
-save('tx_data_test_spectrum','save_data_tx');
+%save('tx_data','save_data_tx');
 
 
 out = out + 0.021 * randn(size(out));

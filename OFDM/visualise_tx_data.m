@@ -13,7 +13,7 @@ fft_size = 2^ceil(log2(90));
 fs = fft_size * 30000;
 sampling_period= fs^-1;
 
-tx_data_sent = load('tx_data.mat')
+tx_data_sent = load('Rx_OFDM_19_11_2020.mat')
 tx_data_sent = tx_data_sent.save_data_tx;
 
 t=1:1:length(tx_data_sent);
@@ -21,13 +21,15 @@ t = t * sampling_period;
 figure
 plot(t,real(tx_data_sent))
 
-fs = 20e6;
 
-Y = fft(tx_data_sent');
+figure
+plot(20*log10(abs(fft(tx_data_sent))))
 
-P2 = abs(Y/length(tx_data_sent));
-P1 = P2(1:length(tx_data_sent)/2+1);
-P1(2:end-1) = 2*P1(2:end-1);
-
-f = fs*(0:(length(tx_data_sent)/2))/length(tx_data_sent);
-plot(f,P1)
+% Y = fft(tx_data_sent');
+% 
+% P2 = abs(Y/length(tx_data_sent));
+% P1 = P2(1:length(tx_data_sent)/2+1);
+% P1(2:end-1) = 2*P1(2:end-1);
+% 
+% f = fs*(0:(length(tx_data_sent)/2))/length(tx_data_sent);
+% plot(f,P1)

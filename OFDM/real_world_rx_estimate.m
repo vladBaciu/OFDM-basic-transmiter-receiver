@@ -8,9 +8,8 @@ load Rx_OFDM_19_11_2020.mat
 load tx_constellation.mat
 load Rx_OFDM_19_11_2020_fs_1Mhz.mat
 
-out1 = Rx_OFDM_19_11_2020_fs_1Mhz;
-%out1 = Rx_OFDM_19_11_2020(10000:13000);
-%out1 = Rx_OFDM_19_11_2020(2000:7000);
+%out1 = Rx_OFDM_19_11_2020;
+out1 = Rx_OFDM_19_11_2020(10000:13000);
 rx_constellations = OFDM_rx(parameters,out1,0);
 tx_wihout_pilot = frequencyDomain_symbols;
 tx_wihout_pilot(pilot_interval_index(1:end),:) = [];
@@ -33,8 +32,7 @@ t=1:1:length(out1);
 t = t * sampling_period;
 
 b=1:1:parameters.fft_size;
-figure
-plot(b,real(ch))
+
 tx_data_temp = 0;
 tx_data_temp(1:length(tx_data_old)) = tx_data_old;
 tx_data_temp(length(tx_data_old)+1:length(out1)) = 0;
