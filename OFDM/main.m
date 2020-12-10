@@ -97,7 +97,7 @@ out = out + 0.021 * randn(size(out));
 
 % TBD - multipath channel and channel estimation
 if parameters.en_multichannel==1
-    [fade_signal,ch] = multi_rayleigh(out,parameters.fft_size);
+    [fade_signal,ch] = CHANNEL_multi_rayleigh(out,parameters.fft_size);
     fade_signal = fade_signal(1:end-1);
 else
     fade_signal = out;

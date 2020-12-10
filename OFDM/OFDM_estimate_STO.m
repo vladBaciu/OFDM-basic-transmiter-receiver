@@ -1,4 +1,4 @@
-function [t_est, out_ach_bits] = SISO_estimate_STO(ach_bits, flags)
+function [t_est, out_ach_bits] = OFDM_estimate_STO(ach_bits, flags)
 %SISO_estimate_STO 
 %   intputs:
 %       -ach_bits: the bit seires coming out from the transmitter

@@ -1,5 +1,3 @@
-
-
 % function [] = real_world_rx_estimate(parameters, rx_buffer, pilot_interval_index)
 
 tx_data_old = load('tx_data_old.mat')

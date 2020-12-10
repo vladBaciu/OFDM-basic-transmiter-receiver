@@ -1,4 +1,4 @@
-function [y, ChFrqRep] = multi_rayleigh( SerOverGIOfdmSym, Nifftop )
+function [y, ChFrqRep] = CHANNEL_multi_rayleigh( SerOverGIOfdmSym, Nifftop )
 % @Return：Signal After Passing through multi-ralyeigh channel  
 % @Para：SerOverGIOfdmSym —— Oversampling
 
