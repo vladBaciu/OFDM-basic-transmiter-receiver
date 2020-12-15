@@ -19,7 +19,7 @@ parameters.number_symbols = 10;
 %Possible values: 128 512 1024 2048
 parameters.fft_size = 2^ceil(log2(parameters.number_subcarriers));
 parameters.cyclicPrefix_us=3.2*1e-6;
-parameters.pilot_frequency = 6 + 6*1i;
+parameters.pilot_frequency = 5 + 5*1i;
 parameters.pilot_tones = 6;
 parameters.use_convolutional_code = 0;
 parameters.use_phase_and_CFO = 1;

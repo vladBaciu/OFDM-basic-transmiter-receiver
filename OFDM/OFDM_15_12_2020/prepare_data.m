@@ -4,8 +4,8 @@
 % 
 % save('tx_data_oversampled4','data_to_send');
 
-load_var = load('feedback/rx_data_oversampled4.mat');
+load_var = load('feedback/rx_data_oversampled4_B.mat');
 tx_data = load_var.rcvdSignal;
-data_to_send = downsample(tx_data,4);
+rcvdSignal = downsample(tx_data,4);
 
-save('rx_data_downsampled4','data_to_send');
+save('rx_data_downsampled4_B','rcvdSignal');
