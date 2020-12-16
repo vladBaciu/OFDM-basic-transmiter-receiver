@@ -15,8 +15,8 @@ sampling_period= fs^-1;
 
 
 
-tx_data_sent = load('Rx_OFDM_19_11_2020.mat')
-tx_data_sent = tx_data_sent.Rx_OFDM_19_11_2020;
+tx_data_sent = load('rx_data_downsampled4_B.mat')
+tx_data_sent = tx_data_sent.rcvdSignal;
 
 t=1:1:length(tx_data_sent);
 t = t * sampling_period;
