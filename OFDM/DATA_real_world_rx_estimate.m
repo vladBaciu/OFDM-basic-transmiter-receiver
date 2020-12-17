@@ -7,7 +7,7 @@ tx_data_old = tx_data_old.save_data_tx;
 % load Rx_OFDM_19_11_2020.mat 
 % load tx_constellation.mat
 % load Rx_OFDM_19_11_2020_fs_1Mhz.mat
-rx_data = load('OFDM_15_12_2020/rx_data_downsampled4_B.mat');
+rx_data = load('OFDM_17_12_2020/output/rx_data_downsampled4_B_1.mat');
 rx_data = rx_data.rcvdSignal;
 
 %out1 = Rx_OFDM_19_11_2020;
