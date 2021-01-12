@@ -22,6 +22,10 @@ t=1:1:length(tx_data_sent);
 t = t * sampling_period;
 figure
 plot(t,real(tx_data_sent))
+figure
+plot(t,abs(tx_data_sent))
+figure
+plot(tx_data_sent)
 
 
 figure
