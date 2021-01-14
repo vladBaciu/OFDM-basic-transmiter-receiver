@@ -105,8 +105,8 @@ else
 end
 
 
-frequency_offset = 8000;
-phase_offset = 80;
+frequency_offset = 0;
+phase_offset = 0;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
                                  'PhaseOffset', phase_offset, ... 
@@ -137,8 +137,6 @@ tx_wihout_pilot(pilot_interval_index(1:end),:) = [];
 tx_constellations = reshape(tx_wihout_pilot,[],1);;
 
 
-
-
 % Error
 error = rx_constellations - tx_constellations;
 
@@ -158,6 +156,9 @@ b=1:1:parameters.fft_size;
 if parameters.en_multichannel == 1
     figure
     plot(b,ch)
+    title('Channel response')
+    xlabel('FFT SLOT')
+    ylabel('Magnitude')
 end
 
 
