@@ -105,7 +105,7 @@ else
 end
 
 
-frequency_offset = 0;
+frequency_offset = 7000;
 phase_offset = 0;
 
 hPFO = comm.PhaseFrequencyOffset('FrequencyOffset', frequency_offset, ...
